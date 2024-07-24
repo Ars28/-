@@ -97,7 +97,7 @@ def deleteEmployee(a):
 def updateEmployee(a,b,c,d,e,f):
     connection = sqlite3.connect('Slaves.db')
     cursor = connection.cursor()
-    cursor.execute(f"UPDATE projects SET phone=?, mail=?, telegram=?, information=?, skills=? WHERE user_id=?",(a,b,c,d,e,f))
+    cursor.execute(f"UPDATE users SET phone=?, mail=?, telegram=?, information=?, skills=? WHERE user_id=?",(a,b,c,d,e,f))
     connection.commit()
     connection.close()
 
@@ -212,9 +212,10 @@ def missSkillsCounter(t):
 def send_welcome(message):
    markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
    btn1=types.KeyboardButton('Стартапы МАИ')
-   btn2=types.KeyboardButton('Для стартаперов')
-   btn3=types.KeyboardButton('Для соискателей')
-   markup.add(btn1, btn2, btn3)
+   btn2=types.KeyboardButton('Школа управления МАИ')
+   btn3=types.KeyboardButton('Для стартаперов')
+   btn4=types.KeyboardButton('Для соискателей')
+   markup.add(btn1, btn2, btn3, btn4)
    bot.reply_to(message, "Приветствую! Я - Ваш помощник для реализации проектов на территории МАИ. Что Вас интересует?".format(message.from_user), reply_markup=markup)
 
 
@@ -231,6 +232,11 @@ def rep(message):
         btn4=types.KeyboardButton("Data-scientist")
         markup.add(btn1, btn2, btn3, btn4)
         bot.send_message(message.chat.id, 'Вот все стартапы, организуемые непосредственно Московским Авиационным Институтом'.format(message.from_user), reply_markup = markup)
+    elif message.text == 'Школа управления МАИ':
+        markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
+        btn1=types.KeyboardButton("Меню")
+        markup.add(btn1)
+        bot.send_message(message.chat.id, 'Школа управления МАИ - программа дополнительного образования которой пользуются даже представители ОАК. Подробнее о ней вы можете узнать на сайте <a href="https://mai.ru/newleader/?ysclid=lyyb5v4ahw319662366">Школы управления</a>'.format(message.from_user), reply_markup = markup)
     elif message.text == 'Для стартаперов':
         markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn1=types.KeyboardButton("Добавить свой стартап в базу")
@@ -334,24 +340,18 @@ def rep(message):
         ni3 = u
         ni2 = str(ni2)
     elif message.text == 'Подтвердить':
-        try:
-            ni1 = message.chat.id
-            ni2 = str(ni2)
-            if employeeUpdater:
-                updateEmployee(phone, mail, tel, ni2, ni3, message.chat.id)
-            else:
-                addEmployee(ni1, phone, mail, tel, ni2, ni3)
-            markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
-            btn1=types.KeyboardButton("Меню")
-            markup.add(btn1)
-            bot.send_message(message.chat.id, text='Данные сохранены', reply_markup=markup)
-            ni2 = ''
-            ni3 = []
-        except:
-            markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
-            btn1=types.KeyboardButton("Меню")
-            markup.add(btn1)
-            bot.send_message(message.chat.id, text='А вы уже зарегистрированы', reply_markup=markup)
+        ni1 = message.chat.id
+        ni2 = str(ni2)
+        if employeeUpdater:
+            updateEmployee(phone, mail, tel, ni2, ni3, message.chat.id)
+        else:
+            addEmployee(ni1, phone, mail, tel, ni2, ni3)
+        markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
+        btn1=types.KeyboardButton("Меню")
+        markup.add(btn1)
+        bot.send_message(message.chat.id, text='Данные сохранены', reply_markup=markup)
+        ni2 = ''
+        ni3 = []
     elif message.text == 'Соискатели, ищущие новые стартапы':
         try:
             showEmployee(message)
@@ -409,9 +409,10 @@ def rep(message):
     elif message.text == 'Меню':
         markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn1=types.KeyboardButton('Стартапы МАИ')
-        btn2=types.KeyboardButton('Для стартаперов')
-        btn3=types.KeyboardButton('Для соискателей')
-        markup.add(btn1, btn2, btn3)
+        btn2=types.KeyboardButton('Школа управления МАИ')
+        btn3=types.KeyboardButton('Для стартаперов')
+        btn4=types.KeyboardButton('Для соискателей')
+        markup.add(btn1, btn2, btn3, btn4)
         bot.send_message(message.chat.id, text='Что-то ещё?', reply_markup = markup)
 
 
